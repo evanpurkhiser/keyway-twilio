@@ -1,10 +1,10 @@
 import * as Sentry from '@sentry/node';
+import {
+  ServerlessEventObject,
+  ServerlessFunctionSignature,
+} from '@twilio-labs/serverless-runtime-types/types';
 import fetch from 'node-fetch';
 import Twilio from 'twilio';
-import {
-  ServerlessFunctionSignature,
-  ServerlessEventObject,
-} from '@twilio-labs/serverless-runtime-types/types';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
 
 Sentry.init({
@@ -158,7 +158,7 @@ const handleAuth: Handler = async function (ctx, event, callback) {
   callback(null, twiml);
 };
 
-export const handler: Handler = async (ctx, event, callback) =>
+export const handler: Handler = (ctx, event, callback) =>
   event.Digits === undefined
     ? handleCall(ctx, event, callback)
     : handleAuth(ctx, event, callback);
