@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@sentry/node": "^7.36.0",
-    "node-fetch": "^3.3.0",
+    "node-fetch": "^2.6.9",
     "twilio": "^3.84.1"
   },
   "volta": {

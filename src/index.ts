@@ -7,18 +7,18 @@ import fetch from 'node-fetch';
 import Twilio from 'twilio';
 import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
 
-Sentry.init({
-  dsn: 'https://2f93a9000711464a8c6fa4f19563c612@o126623.ingest.sentry.io/5391542',
-});
+Sentry.init({dsn: process.env.SENTRY_DSN});
 
+/**
+ * Base URL used for communicating with the keyway authentication server
+ */
 const ENDPOINT_URL = 'https://hass.evanpurkhiser.com/api/appdaemon';
 
-const NUMBER_MAP = {
-  '+16802255269': {
-    name: 'evan',
-    number: '+13306220474',
-  },
-} as const;
+/**
+ * This is the number that the callbox will forward to if there are ANY issues
+ * communicating with the keyway service.
+ */
+const FALLBACK_NUMBER = '+13306220474';
 
 interface RequestParameters extends ServerlessEventObject {
   /**
@@ -28,7 +28,7 @@ interface RequestParameters extends ServerlessEventObject {
   /**
    * Number called
    */
-  Called: keyof typeof NUMBER_MAP;
+  Called: string;
   /**
    * When authorization has been gathered, this will be present
    */
@@ -36,12 +36,53 @@ interface RequestParameters extends ServerlessEventObject {
 }
 
 type Env = {
+  /**
+   * API key used to communicate with the keyway service
+   */
   API_KEY: string;
 };
 
+/**
+ * When the user does not enter an access code this configuration tells the
+ * service who the call should be forwarded to.
+ */
+type ForwardingConfig = {
+  /**
+   * The name of the contact the callbox will forward to on failure
+   */
+  name: string;
+  /**
+   * The number of the contact to call
+   */
+  number: string;
+};
+
+/**
+ * Maps the number called via the callbox to the ForwardingConfig for user who
+ * owns the callbox number
+ */
+type ConfigMapping = Record<string, ForwardingConfig>;
+
 type TriggerResponse = {
+  /**
+   * The entry code used to unlock the door
+   */
+  entryCode: string;
+  /**
+   * The configuration mapping
+   */
+  configMapping: ConfigMapping;
+  /**
+   * The expected number of digits needed for authentication
+   */
   numDigits: number;
+  /**
+   * The total number of codes that are currently registered
+   */
   numRegisteredCodes: number;
+  /**
+   * The total number of single use codes currently registered
+   */
   numSingleUseCodes: number;
 };
 
@@ -57,22 +98,26 @@ type AuthResponse =
 
 type Handler = ServerlessFunctionSignature<Env, RequestParameters>;
 
-const unlock = (twiml: VoiceResponse) => {
-  // Unlock the door with the DTMF digit 9
+/**
+ * Trigger the door to unlock via a DTMF code
+ */
+function unlock(twiml: VoiceResponse) {
   twiml.pause({length: 1});
   twiml.play({digits: '9'});
-};
+}
 
-const say = (instance: {say: VoiceResponse['say']}, m: string) => {
+/**
+ * Say some text
+ */
+function say(instance: {say: VoiceResponse['say']}, m: string) {
   const speech = instance.say('');
   speech.prosody({volume: 'x-loud'}, m);
-};
+}
 
 /**
  * Handle when a call first comes in, and no authorization has been provded.
  */
 const handleCall: Handler = async function (ctx, event, callback) {
-  const target = NUMBER_MAP[event.Called];
   const twiml = new Twilio.twiml.VoiceResponse();
 
   const resp = await fetch(`${ENDPOINT_URL}/callbox_trigger`, {
@@ -92,12 +137,14 @@ const handleCall: Handler = async function (ctx, event, callback) {
 
     await Sentry.close(2000);
 
-    twiml.dial(target.number);
+    twiml.dial(FALLBACK_NUMBER);
     callback(null, twiml);
     return;
   }
 
   const data = (await resp.json()) as TriggerResponse;
+
+  const target = data.configMapping[event.Called];
 
   // When we have single use codes available, give the user more time to enter.
   const gather = twiml.gather({
