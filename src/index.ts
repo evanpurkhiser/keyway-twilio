@@ -12,13 +12,13 @@ Sentry.init({dsn: process.env.SENTRY_DSN});
 /**
  * Base URL used for communicating with the keyway authentication server
  */
-const ENDPOINT_URL = 'https://hass.evanpurkhiser.com/api/appdaemon';
+const ENDPOINT_URL = process.env.KEYWAY_SERVICE_URL;
 
 /**
  * This is the number that the callbox will forward to if there are ANY issues
  * communicating with the keyway service.
  */
-const FALLBACK_NUMBER = '+13306220474';
+const FALLBACK_NUMBER = process.env.KEYWAY_FALLBACK_NUMBER;
 
 interface RequestParameters extends ServerlessEventObject {
   /**
