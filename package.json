@@ -7,7 +7,7 @@
     "prestart": "tsc",
     "start": "twilio-run start",
     "predeploy": "tsc",
-    "deploy": "twilio-run deploy",
+    "deploy": "twilio-run deploy ",
     "activate": "twilio-run activate --source-environment=dev --production"
   },
   "devDependencies": {
@@ -30,6 +30,6 @@
   },
   "twilioserverless": {
     "runtime": "node16",
-    "serviceSid": "ZS51962355de37af6d9d171e4e681d0e82"
+    "overrideExistingProject": true
   }
 }
