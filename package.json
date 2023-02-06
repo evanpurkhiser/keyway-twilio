@@ -8,8 +8,7 @@
     "start": "twilio-run start",
     "predeploy": "tsc",
     "deploy": "twilio-run deploy",
-    "predeploy-prod": "tsc",
-    "deploy-prod": "twilio-run deploy --account-sid=$ACCOUNT_SID --auth-token=$AUTH_TOKEN --override-existing-project --environment=prod"
+    "activate": "twilio-run activate --environment=prod --source-environment=dev"
   },
   "devDependencies": {
     "@evanpurkhiser/eslint-config": "^0.13.0",
