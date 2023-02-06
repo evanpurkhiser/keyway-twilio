@@ -15,7 +15,7 @@ jobs:
         with:
           envkey_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
           envkey_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          envkey_SENTRY_DNS: ${{ secrets.SENTRY_DNS }}
+          envkey_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       - run: yarn
       - run: yarn deploy
       - run: yarn activate
