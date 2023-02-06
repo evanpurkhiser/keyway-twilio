@@ -183,10 +183,7 @@ const handleAuth: Handler = async function (ctx, event, callback) {
 
   // If it's a single use code give them specific instructions to find the apartment.
   if (data.isSingleUse) {
-    say(
-      twiml,
-      'Valid access code. Apartment 3-0-1 is on floor 3 up the stairs to the right.'
-    );
+    say(twiml, 'Valid access code. Apartment 5-0-7 is on floor 5.');
     unlock(twiml);
     callback(null, twiml);
     return;
@@ -198,7 +195,7 @@ const handleAuth: Handler = async function (ctx, event, callback) {
 
   // Tell them where the door is
   if (data.visitNumber === 1) {
-    say(twiml, 'Find apartment 3-0-1 on floor 3 up the stairs to the right.');
+    say(twiml, 'Find apartment 5-0-7 on floor 5.');
   }
 
   unlock(twiml);
