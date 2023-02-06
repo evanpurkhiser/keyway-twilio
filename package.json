@@ -8,7 +8,7 @@
     "start": "twilio-run start",
     "predeploy": "tsc",
     "deploy": "twilio-run deploy ",
-    "activate": "twilio-run activate --source-environment=dev --production"
+    "activate": "twilio-run activate --source-environment=dev --create-environment --production"
   },
   "devDependencies": {
     "@evanpurkhiser/eslint-config": "^0.13.0",
