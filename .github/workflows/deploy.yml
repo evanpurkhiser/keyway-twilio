@@ -1,0 +1,18 @@
+name: deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy Twilio callbox service
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: volta-cli/action@v4
+      - run: yarn
+      - name: Deploying to Twilio
+        run: yarn deploy-prod
+        env:
+          ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+          AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
