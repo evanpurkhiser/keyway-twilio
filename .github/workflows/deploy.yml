@@ -14,9 +14,9 @@ jobs:
         run: |
           echo "ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env;
           echo "AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env;
-          echo "SENTRY_DSN=$SENTRY_DSN" >> .env;
-          echo "KEYWAY_SERVICE_URL=$KEYWAY_SERVICE_URL" >> .env;
-          echo "KEYWAY_FALLBACK_NUMBER=$KEYWAY_FALLBACK_NUMBER" >> .env;
+          echo "SENTRY_DSN=${{ vars.SENTRY_DSN }}" >> .env;
+          echo "KEYWAY_SERVICE_URL=${{ vars.KEYWAY_SERVICE_URL }}" >> .env;
+          echo "KEYWAY_FALLBACK_NUMBER=${{ vars.KEYWAY_FALLBACK_NUMBER }}" >> .env;
       - run: yarn
       - run: yarn deploy
       - run: yarn activate
