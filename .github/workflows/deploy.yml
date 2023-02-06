@@ -11,13 +11,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: volta-cli/action@v4
       - name: Create .env
-        uses: spicypizza/create-envfile@v1.3
-        with:
-          envkey_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          envkey_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          envkey_SENTRY_DSN: ${{ env.SENTRY_DSN }}
-          envkey_KEYWAY_SERVICE_URL: ${{ env.KEYWAY_SERVICE_URL }}
-          envkey_KEYWAY_FALLBACK_NUMBER: ${{ env.KEYWAY_FALLBACK_NUMBER }}
+        run: |
+          echo "ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env;
+          echo "AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env;
+          echo "SENTRY_DSN=$SENTRY_DSN" >> .env;
+          echo "KEYWAY_SERVICE_URL=$KEYWAY_SERVICE_URL" >> .env;
+          echo "KEYWAY_FALLBACK_NUMBER=$KEYWAY_FALLBACK_NUMBER" >> .env;
       - run: yarn
       - run: yarn deploy
       - run: yarn activate
