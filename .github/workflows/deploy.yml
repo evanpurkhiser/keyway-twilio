@@ -10,6 +10,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: volta-cli/action@v4
+        with:
+          node-version: 24.0.0
+          yarn-version: 1.22.19
       - name: Create .env
         run: |
           echo "ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}" >> .env;
