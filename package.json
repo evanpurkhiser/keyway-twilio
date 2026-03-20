@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/package.json",
   "name": "keyway",
   "version": "1.0.0",
-  "main": "index.js",
   "license": "MIT",
+  "main": "index.js",
   "scripts": {
     "prestart": "tsc",
     "start": "twilio-run start",
@@ -11,19 +11,19 @@
     "deploy": "twilio-run deploy ",
     "activate": "twilio-run activate --source-environment=dev --create-environment --production"
   },
+  "dependencies": {
+    "@sentry/node": "^7.36.0",
+    "node-fetch": "^2.6.9",
+    "twilio": "^3.84.1"
+  },
   "devDependencies": {
     "@evanpurkhiser/eslint-config": "^0.13.0",
     "@twilio-labs/serverless-runtime-types": "^2.2.3",
     "@types/node-fetch": "^2.5.7",
     "eslint": "^8.33.0",
-    "prettier": "^2.8.3",
+    "oxfmt": "^0.41.0",
     "twilio-run": "^3.5.3",
     "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "@sentry/node": "^7.36.0",
-    "node-fetch": "^2.6.9",
-    "twilio": "^3.84.1"
   },
   "volta": {
     "node": "16.16.0",
