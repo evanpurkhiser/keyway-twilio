@@ -1,11 +1,11 @@
 import * as Sentry from '@sentry/node';
-import {
+import type {
   ServerlessEventObject,
   ServerlessFunctionSignature,
 } from '@twilio-labs/serverless-runtime-types/types';
 import fetch from 'node-fetch';
 import Twilio from 'twilio';
-import VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
+import type VoiceResponse from 'twilio/lib/twiml/VoiceResponse';
 
 Sentry.init({dsn: process.env.SENTRY_DSN});
 
